@@ -21,10 +21,10 @@ mBuf[1] = MBOX_REQUEST;
 mBuf[2] = MBOX_TAG_SETPHYWH; //Set physical width-height
 mBuf[3] = 8; // Value size in bytes
 mBuf[4] = 0; // REQUEST CODE = 0
-// mBuf[5] = 800; // Set width as per image width
-// mBuf[6] = 500; // Set height to smaller of screen or image height
-mBuf[5] = imgWidth; // Set width as per image width
-mBuf[6] = imgHeight > height ? height : imgHeight; // Set height to smaller of screen or image height
+mBuf[5] = 800; // Set width as per image width
+mBuf[6] = 500; // Set height to smaller of screen or image height
+// mBuf[5] = imgWidth; // Set width as per image width
+// mBuf[6] = imgHeight > height ? height : imgHeight; // Set height to smaller of screen or image height
 mBuf[7] = MBOX_TAG_SETVIRTWH; //Set virtual width-height
 mBuf[8] = 8;
 mBuf[9] = 0;
