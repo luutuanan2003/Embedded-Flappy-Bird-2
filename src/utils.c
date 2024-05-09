@@ -3,8 +3,9 @@
 
 
 void drawPixelARGB32(int x, int y, unsigned int attr);
-/* Functions to display text on the screen */
 
+/* Functions to display text on the screen */
+// Note: zoom = 0 will not display the character
 void drawChar(unsigned char ch, int x, int y, unsigned int attr, int zoom)
 {
     unsigned char *glyph = (unsigned char *)&font + (ch < FONT_NUMGLYPHS ? ch : 0) * FONT_BPG;
@@ -38,32 +39,9 @@ void drawString(int x, int y, char *str, unsigned int attr, int zoom)
 }
 
 
-
-/* New function for Uart: Check and return if no new character, don't wait */
-
-#if 1 //UART0
-unsigned int uart_isReadByteReady(){
-	return ( !(UART0_FR & UART0_FR_RXFE) );
-}
-
-#else //UART1
-unsigned int uart_isReadByteReady(){
-	return (AUX_MU_LSR & 0x01);
-}
-#endif
-
-unsigned char getUart(){
-    unsigned char ch = 0;
-    if (uart_isReadByteReady())
-    	ch = uart_getc();
-    return ch;
-}
-
-
-
 /* Functions to delay, set/wait timer */
 
-void wait_msec(unsigned int n)
+void wait_msec(unsigned int msVal)
 {
     register unsigned long f, t, r, expiredTime;
 
@@ -74,7 +52,10 @@ void wait_msec(unsigned int n)
     asm volatile ("mrs %0, cntpct_el0" : "=r"(t));
     
     // Calculate expire value for counter
-    expiredTime = t + ( (f/1000)*n )/1000;
+    /* Note: both expiredTime and counter value t are 64 bits,
+    thus, it will still be correct when the counter is overflow */  
+    expiredTime = t + f * (msVal/1000);
+
     do {
     	asm volatile ("mrs %0, cntpct_el0" : "=r"(r));
     } while(r < expiredTime);
@@ -94,7 +75,7 @@ void set_wait_timer(int set, unsigned int msVal) {
         asm volatile ("mrs %0, cntpct_el0" : "=r"(t));
 
         // Calculate expired time:
-        expiredTime = t + ( (f/1000)*msVal )/1000;
+        expiredTime = t + f * (msVal/1000);
     } 
     else { /* WAIT FOR TIMER TO EXPIRE */
         do {
