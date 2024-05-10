@@ -4,7 +4,8 @@
 #include "ex1picture.h"
 #include "frames.h"
 #include "bird.h"
-
+#include "font.h"
+#include "utils.h"
 
 // // Breaking Bad frames
 // const unsigned long* frames[] = { epd_bitmap_frame1ezgif_frame_001, epd_bitmap_frame2ezgif_frame_002, epd_bitmap_frame3ezgif_frame_003, 
@@ -47,7 +48,19 @@ int currentY = 0;
 //     }
 // }
 
+//Task iii
+void display_name() {
+    char *names[] = {"Le Trung Kien", "Luu Tuan An", "Pham Nguyen Minh Dang", "Dang Vinh Luan"};
+    unsigned int colors[] = {0x00FF0000, 0x0000FF00, 0x000000FF, 0x00FFFF00}; // Red, Green, Blue, Yellow
+    int numNames = sizeof(names) / sizeof(names[0]);
 
+    int startY = 50; // Starting Y position for the first name
+    for (int i = 0; i < numNames; i++)
+    {
+        drawString(100, startY, names[i], colors[i], 2); // X position, Y position, string, color, zoom
+        startY += FONT_HEIGHT * 5 + 10;                  // Move to next line, increase by font height and some padding
+    }
+}
 
 
 void main()
@@ -59,46 +72,45 @@ uart_puts("\n\nHello World");
 // Initialize frame buffer
 framebf_init();
 
-// Create and initialize the bird.
+// // Create and initialize the bird.
+// hitboxBird myBird;
 
-hitboxBird myBird;
-
-initBird(&myBird, 100.0, 100.0, 100.0, 100.0, 0.0);
-
-
-// Calculate hitbox coordinates
-float x1 = myBird.x;
-float y1 = myBird.y;
-float x2 = myBird.x + myBird.width;
-float y2 = myBird.y + myBird.height;
-
-uart_puts("\nx1");
-
-uart_dec(x1);
-
-uart_puts("\ny1");
-
-uart_dec(y1);
-uart_puts("\nx2");
-
-uart_dec(x2);
-uart_puts("\ny2");
-
-uart_dec(y2);
+// initBird(&myBird, 100.0, 100.0, 100.0, 100.0, 0.0);
 
 
-// Testing to draw the hitbox of the bird
-drawRectARGB32(x1, y1, x2, y2, 0x00AA0000, 1);
-//drawRectARGB32(100.5,100.5,400.5,400.5,0x00AA0000,1); //RED
+// // Calculate hitbox coordinates
+// float x1 = myBird.x;
+// float y1 = myBird.y;
+// float x2 = myBird.x + myBird.width;
+// float y2 = myBird.y + myBird.height;
+
+// uart_puts("\nx1");
+
+// uart_dec(x1);
+
+// uart_puts("\ny1");
+
+// uart_dec(y1);
+// uart_puts("\nx2");
+
+// uart_dec(x2);
+// uart_puts("\ny2");
+
+// uart_dec(y2);
 
 
-while(1) {
-    updateBirdFall(&myBird);
-    updateBirdonClick(&myBird);
-}
+// // Testing to draw the hitbox of the bird
+// drawRectARGB32(x1, y1, x2, y2, 0x00AA0000, 1);
+// //drawRectARGB32(100.5,100.5,400.5,400.5,0x00AA0000,1); //RED
 
 
+// while(1) {
+//     updateBirdFall(&myBird);
+//     updateBirdonClick(&myBird);
+// }
 
+// Task iii: Display names
+display_name();
 
 // display_video();
 
