@@ -25,8 +25,8 @@ _start:
     str     xzr, [x1], #8
     sub     w2, w2, #1
     cbnz    w2, 3b               // Loop if non-zero
-
+4:
     // Jump to our main() routine in C (make sure it doesn't return)
-4:  bl      main
+5:  bl      main
     // In case it does return, halt the master core too
 	b       1b
