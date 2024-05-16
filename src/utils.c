@@ -1,10 +1,12 @@
 #include "font.h"
 #include "uart0.h"
 
-
 void drawPixelARGB32(int x, int y, unsigned int attr);
-/* Functions to display text on the screen */
+extern void drawChar(unsigned char ch, int x, int y, unsigned int attr, int zoom);
+extern void drawString(int x, int y, char *str, unsigned int attr, int zoom);
 
+/* Functions to display text on the screen */
+// Note: zoom = 0 will not display the character
 void drawChar(unsigned char ch, int x, int y, unsigned int attr, int zoom)
 {
     unsigned char *glyph = (unsigned char *)&font + (ch < FONT_NUMGLYPHS ? ch : 0) * FONT_BPG;
@@ -63,7 +65,7 @@ unsigned char getUart(){
 
 /* Functions to delay, set/wait timer */
 
-void wait_msec(unsigned int n)
+void wait_msec(unsigned int msVal)
 {
     register unsigned long f, t, r, expiredTime;
 
@@ -74,7 +76,10 @@ void wait_msec(unsigned int n)
     asm volatile ("mrs %0, cntpct_el0" : "=r"(t));
     
     // Calculate expire value for counter
-    expiredTime = t + ( (f/1000)*n )/1000;
+    /* Note: both expiredTime and counter value t are 64 bits,
+    thus, it will still be correct when the counter is overflow */  
+    expiredTime = t + f * (msVal/1000);
+
     do {
     	asm volatile ("mrs %0, cntpct_el0" : "=r"(r));
     } while(r < expiredTime);
@@ -94,7 +99,7 @@ void set_wait_timer(int set, unsigned int msVal) {
         asm volatile ("mrs %0, cntpct_el0" : "=r"(t));
 
         // Calculate expired time:
-        expiredTime = t + ( (f/1000)*msVal )/1000;
+        expiredTime = t + f * (msVal/1000);
     } 
     else { /* WAIT FOR TIMER TO EXPIRE */
         do {
