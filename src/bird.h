@@ -14,6 +14,6 @@ typedef struct {
 
 // Function prototypes
 void initBird(hitboxBird* bird, float width, float height, float x, float y, float speed);
-void clear(hitboxBird* bird);
+void clearBird(hitboxBird* bird);
 void updateBirdFall(hitboxBird* bird);
 void updateBirdonClick(hitboxBird* bird);

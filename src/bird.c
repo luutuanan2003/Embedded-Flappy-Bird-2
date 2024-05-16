@@ -10,7 +10,7 @@ void initBird(hitboxBird* bird, float width, float height, float x, float y, flo
     bird->speed = speed;
 }
 
-void clear(hitboxBird* bird){
+void clearBird(hitboxBird* bird){
     float x1 = bird->x;
     float y1 = bird->y;
     float x2 = bird->x + bird->width;
@@ -27,31 +27,28 @@ void drawBird(hitboxBird* bird) {
 }
 
 void updateBirdFall(hitboxBird* bird) {
-    clear(bird);
-    delay(200); // Delay for 100ms; adjust as needed for desired frame rate
-
+    
     bird->speed += G; // Increase speed by gravity
     bird->y += bird->speed + 0.5 * G; // Update y position based on speed and gravity
     drawBird(bird);
     delay(200); // Delay for 100ms; adjust as needed for desired frame rate
-    clear(bird);
+    clearBird(bird);
 
 }
 
 void updateBirdonClick(hitboxBird* bird){
-    clear(bird);
-    delay(200); // Delay for 100ms; adjust as needed for desired frame rate
+
     bird->y += bird->speed + 0.5 * G;
     bird->speed += G;
     if (uart_isReadByteReady()) {
         char c = uart_getc();
         if (c == 'a') {
-            clear(bird);
+            clearBird(bird);
             uart_puts("Space bar hit\n");
             bird->speed = SPEEDFLY;
         }
     }
     drawBird(bird);
     delay(200); // Delay for 100ms; adjust as needed for desired frame rate
-    clear(bird);
+    clearBird(bird);
 }

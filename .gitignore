@@ -1,0 +1,10 @@
+kernel8.img
+object/bird.o
+object/boot.o
+object/columns.o
+object/framebf.o
+object/kernel.o
+object/kernel8.elf
+object/mbox.o
+object/uart0.o
+object/utils.o

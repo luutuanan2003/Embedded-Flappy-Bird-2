@@ -4,6 +4,7 @@
 #include "ex1picture.h"
 #include "frames.h"
 #include "bird.h"
+#include "columns.h"
 
 
 // // Breaking Bad frames
@@ -63,8 +64,10 @@ framebf_init();
 
 hitboxBird myBird;
 
-initBird(&myBird, 100.0, 100.0, 100.0, 100.0, 0.0);
+Columns gameColumns;
 
+initBird(&myBird, 50.0, 50.0, 100.0, 100.0, 0.0);
+initColumns(&gameColumns);
 
 // Calculate hitbox coordinates
 float x1 = myBird.x;
@@ -72,27 +75,13 @@ float y1 = myBird.y;
 float x2 = myBird.x + myBird.width;
 float y2 = myBird.y + myBird.height;
 
-uart_puts("\nx1");
-
-uart_dec(x1);
-
-uart_puts("\ny1");
-
-uart_dec(y1);
-uart_puts("\nx2");
-
-uart_dec(x2);
-uart_puts("\ny2");
-
-uart_dec(y2);
-
 
 // Testing to draw the hitbox of the bird
 drawRectARGB32(x1, y1, x2, y2, 0x00AA0000, 1);
-//drawRectARGB32(100.5,100.5,400.5,400.5,0x00AA0000,1); //RED
-
 
 while(1) {
+    drawColumns(&gameColumns);
+    updateColumns(&gameColumns);
     updateBirdFall(&myBird);
     updateBirdonClick(&myBird);
 }
@@ -102,26 +91,26 @@ while(1) {
 
 // display_video();
 
-// // // Drawing the image
-// // for (int y = 0; y < imgHeight; y++) {
-// //     for (int x = 0; x < imgWidth; x++) {
-// //         unsigned int index = y * imgWidth + x;
-// //         drawPixelARGB32(x, y, epd_bitmap_linhtran[index]);
-// //     }
-// // }
+// // Drawing the image
+// for (int y = 0; y < imgHeight; y++) {
+//     for (int x = 0; x < imgWidth; x++) {
+//         unsigned int index = y * imgWidth + x;
+//         drawPixelARGB32(x, y, epd_bitmap_linhtran[index]);
+//     }
+// }
 
-// echo everything back
-while(1) {
-    if (uart_isReadByteReady()) {
-        char c = uart_getc();
-        if (c == 'w' && currentY > 0) {
-            currentY -= 10; // Scroll up by 10 pixels
-        } else if (c == 's' && currentY < (imgHeight - height)) {
-            currentY += 10; // Scroll down by 10 pixels
-        }
-        scrollImage();
-        uart_sendc(c);
-    }
-}
+// // echo everything back
+// while(1) {
+//     if (uart_isReadByteReady()) {
+//         char c = uart_getc();
+//         if (c == 'w' && currentY > 0) {
+//             currentY -= 10; // Scroll up by 10 pixels
+//         } else if (c == 's' && currentY < (imgHeight - height)) {
+//             currentY += 10; // Scroll down by 10 pixels
+//         }
+//         scrollImage();
+//         uart_sendc(c);
+//     }
+// }
 }
 
